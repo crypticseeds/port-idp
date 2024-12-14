@@ -1,0 +1,40 @@
+{
+    "identifier": "deploy_to_eks",
+    "title": "Deploy to EKS",
+    "description": "Build and deploy an image to EKS",
+    "trigger": {
+      "type": "self-service",
+      "operation": "DAY-2",
+      "userInputs": {
+        "properties": {
+          "cluster": {
+            "type": "string",
+            "blueprint": "eks",
+            "title": "Cluster",
+            "format": "entity"
+          }
+        },
+        "required": [],
+        "order": []
+      },
+      "blueprintIdentifier": "eks"
+    },
+    "invocationMethod": {
+      "type": "GITHUB",
+      "org": "<GITHUB_ORG>",
+      "repo": "<GITHUB_REPO>",
+      "workflow": "build-and-deploy.yml",
+      "workflowInputs": {
+        "cluster": "{{.inputs.\"cluster\"}}",
+        "context": {
+          "entity": "{{ .entity }}",
+          "blueprint": "{{ .action.blueprint }}",
+          "runId": "{{ .run.id }}",
+          "trigger": "{{ .trigger }}"
+        }
+      },
+      "reportWorkflowStatus": true
+    },
+    "requiredApproval": false,
+    "publish": true
+  }

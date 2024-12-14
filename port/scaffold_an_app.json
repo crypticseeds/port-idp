@@ -1,0 +1,58 @@
+{
+  "identifier": "repository_scaffold_node_app",
+  "title": "Scaffold Node App",
+  "description": "Scaffold a node.js app",
+  "trigger": {
+    "type": "self-service",
+    "operation": "CREATE",
+    "userInputs": {
+      "properties": {
+        "project_name": {
+          "title": "Project Name",
+          "description": "The name of the project",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "repo_name": {
+          "icon": "DefaultProperty",
+          "title": "Repository Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "project_name",
+        "repo_name"
+      ],
+      "order": [
+        "project_name",
+        "repo_name",
+        "description"
+      ]
+    },
+    "blueprintIdentifier": "repository"
+  },
+  "invocationMethod": {
+    "type": "GITHUB",
+    "org": "phalbert",
+    "repo": "azure-resources-terraform",
+    "workflow": "scaffold-app.yml",
+    "workflowInputs": {
+      "project_name": "{{.inputs.\"project_name\"}}",
+      "repo_name": "{{.inputs.\"repo_name\"}}",
+      "template": "{{.inputs.\"template\"}}",
+      "description": "{{.inputs.\"description\"}}",
+      "context": {
+        "entity": "{{ .entity }}",
+        "blueprint": "{{ .action.blueprint }}",
+        "runId": "{{ .run.id }}",
+        "trigger": "{{ .trigger }}"
+      }
+    },
+    "reportWorkflowStatus": true
+  },
+  "requiredApproval": false,
+  "publish": true
+}
