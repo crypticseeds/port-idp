@@ -31,11 +31,12 @@ jobs:
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
       PORT_CLIENT_ID: ${{ secrets.PORT_CLIENT_ID }}
       PORT_CLIENT_SECRET: ${{ secrets.PORT_CLIENT_SECRET }}
       TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
       CLUSTER_NAME: ${{ github.event.inputs.cluster_name }}
-      # REGION: ${{ github.event.inputs.region }}
+      REGION: ${{ github.event.inputs.region }}
       ACTION: ${{ github.event.inputs.action }}
       PORT_RUN_ID: ${{ fromJson(inputs.port_context).runId }}
 
@@ -76,7 +77,7 @@ jobs:
         run: terraform apply -auto-approve
         env:
           TF_VAR_cluster_name: ${{ env.CLUSTER_NAME }}
-          TF_VAR_region: ${{ env.REGION }}
+          TF_VAR_region: ${{ secrets.AWS_REGION }}
           TF_VAR_port_run_id: ${{ env.PORT_RUN_ID }}
           tf_api_token: ${{ secrets.TF_API_TOKEN }}
 
@@ -85,7 +86,7 @@ jobs:
         run: terraform destroy -auto-approve
         env:
           TF_VAR_cluster_name: ${{ env.CLUSTER_NAME }}
-          TF_VAR_region: ${{ env.REGION }}
+          TF_VAR_region: ${{ secrets.AWS_REGION }}
           TF_VAR_port_run_id: ${{ env.PORT_RUN_ID }}
           tf_api_token: ${{ secrets.TF_API_TOKEN }}
 
