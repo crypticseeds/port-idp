@@ -74,6 +74,9 @@ jobs:
           TF_VAR_region: ${{ env.REGION }}
           TF_VAR_port_run_id: ${{ env.PORT_RUN_ID }}
           tf_api_token: ${{ secrets.TF_API_TOKEN }}
+          access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          region: ${{ env.REGION }}
 
       - name: Terraform Destroy
         if: ${{ github.event.inputs.action == 'destroy' }}
@@ -83,6 +86,9 @@ jobs:
           TF_VAR_region: ${{ env.REGION }}
           TF_VAR_port_run_id: ${{ env.PORT_RUN_ID }}
           tf_api_token: ${{ secrets.TF_API_TOKEN }}
+          access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          region: ${{ env.REGION }}
 
       - name: Inform Port about the status of the EKS cluster creation
         if: ${{ github.event.inputs.action == 'apply' }}
