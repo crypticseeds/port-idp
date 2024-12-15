@@ -35,7 +35,7 @@ jobs:
       PORT_CLIENT_SECRET: ${{ secrets.PORT_CLIENT_SECRET }}
       TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
       CLUSTER_NAME: ${{ github.event.inputs.cluster_name }}
-      REGION: ${{ github.event.inputs.region }}
+      # REGION: ${{ github.event.inputs.region }}
       ACTION: ${{ github.event.inputs.action }}
       PORT_RUN_ID: ${{ fromJson(inputs.port_context).runId }}
 
