@@ -13,9 +13,9 @@ on:
         description: "Action to perform (apply/destroy)"
         required: true
         default: "apply"
-      context:
+      port_context:
         required: true
-        description: "Port's payload (who triggered, context, etc...)"
+        description: "Port's payload (who triggered, port_context, etc...)"
         type: string
 
 jobs:
@@ -29,20 +29,19 @@ jobs:
     if: ${{ github.event.inputs.action == 'apply' || github.event.inputs.action == 'destroy' }}
 
     env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      PORT_CLIENT_ID: ${{ secrets.PORT_CLIENT_ID }}
+      PORT_CLIENT_SECRET: ${{ secrets.PORT_CLIENT_SECRET }}
+      TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
       CLUSTER_NAME: ${{ github.event.inputs.cluster_name }}
       REGION: ${{ github.event.inputs.region }}
       ACTION: ${{ github.event.inputs.action }}
-      PORT_RUN_ID: ${{ fromJson(inputs.context).runId }}
-      tf_api_token: ${{ secrets.TF_API_TOKEN }}
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_REGION: ${{ secrets.AWS_REGION }}
-      PORT_CLIENT_ID: ${{ secrets.PORT_CLIENT_ID }}
-      PORT_CLIENT_SECRET: ${{ secrets.PORT_CLIENT_SECRET }}
+      PORT_RUN_ID: ${{ fromJson(inputs.port_context).runId }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Create a log message (apply)
         if: ${{ github.event.inputs.action == 'apply' }}
@@ -56,9 +55,7 @@ jobs:
           logMessage: "Initiating creation of EKS cluster: ${{ env.CLUSTER_NAME }}."
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2.0.2
-        with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+        uses: hashicorp/setup-terraform@v1
 
       - name: Terraform Init
         run: terraform init
@@ -74,31 +71,23 @@ jobs:
       - name: Terraform Apply
         id: terraform_apply
         if: ${{ github.event.inputs.action == 'apply' }}
+        run: terraform apply -auto-approve
         env:
           TF_VAR_cluster_name: ${{ env.CLUSTER_NAME }}
           TF_VAR_region: ${{ env.REGION }}
           TF_VAR_port_run_id: ${{ env.PORT_RUN_ID }}
+          env:
           tf_api_token: ${{ secrets.TF_API_TOKEN }}
-          PORT_CLIENT_ID: ${{ secrets.PORT_CLIENT_ID }}
-          PORT_CLIENT_SECRET: ${{ secrets.PORT_CLIENT_SECRET }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-        run: terraform apply -auto-approve
 
       - name: Terraform Destroy
         if: ${{ github.event.inputs.action == 'destroy' }}
+        run: terraform destroy -auto-approve
         env:
           TF_VAR_cluster_name: ${{ env.CLUSTER_NAME }}
           TF_VAR_region: ${{ env.REGION }}
           TF_VAR_port_run_id: ${{ env.PORT_RUN_ID }}
+          env:
           tf_api_token: ${{ secrets.TF_API_TOKEN }}
-          PORT_CLIENT_ID: ${{ secrets.PORT_CLIENT_ID }}
-          PORT_CLIENT_SECRET: ${{ secrets.PORT_CLIENT_SECRET }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-        run: terraform destroy -auto-approve
 
       - name: Inform Port about the status of the EKS cluster creation
         if: ${{ github.event.inputs.action == 'apply' }}
