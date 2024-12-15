@@ -82,6 +82,7 @@ jobs:
           tf_api_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Terraform Destroy
+        id: terraform_destroy
         if: ${{ github.event.inputs.action == 'destroy' }}
         run: terraform destroy -auto-approve
         env:
