@@ -21,6 +21,11 @@ on:
 jobs:
   manage_cluster:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./terraform
+
     if: ${{ github.event.inputs.action == 'apply' || github.event.inputs.action == 'destroy' }}
 
     env:
@@ -32,11 +37,11 @@ jobs:
       CLUSTER_NAME: ${{ github.event.inputs.cluster_name }}
       REGION: ${{ github.event.inputs.region }}
       ACTION: ${{ github.event.inputs.action }}
-      PORT_RUN_ID: ${{ fromJson(github.event.inputs.port_context).runId }}
+      PORT_RUN_ID: ${{ fromJson(inputs.port_context).runId }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Create a log message (apply)
         if: ${{ github.event.inputs.action == 'apply' }}
@@ -54,6 +59,8 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
+        env:
+          tf_api_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Terraform Format
         run: terraform fmt
@@ -69,6 +76,7 @@ jobs:
           TF_VAR_cluster_name: ${{ env.CLUSTER_NAME }}
           TF_VAR_region: ${{ env.REGION }}
           TF_VAR_port_run_id: ${{ env.PORT_RUN_ID }}
+          tf_api_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Terraform Destroy
         if: ${{ github.event.inputs.action == 'destroy' }}
@@ -77,6 +85,7 @@ jobs:
           TF_VAR_cluster_name: ${{ env.CLUSTER_NAME }}
           TF_VAR_region: ${{ env.REGION }}
           TF_VAR_port_run_id: ${{ env.PORT_RUN_ID }}
+          tf_api_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Inform Port about the status of the EKS cluster creation
         if: ${{ github.event.inputs.action == 'apply' }}
@@ -88,7 +97,7 @@ jobs:
           operation: PATCH_RUN
           status: "SUCCESS"
           runId: ${{ env.PORT_RUN_ID }}
-          logMessage: "EKS cluster creation has been completed: ${{ env.CLUSTER_NAME }}."
+          logMessage: "EKS cluster creation has been completed: ${{ env.CLUSTER_NAME }}"
 
       - name: Inform Port about the status of the EKS cluster destruction
         if: ${{ github.event.inputs.action == 'destroy' }}
@@ -100,4 +109,4 @@ jobs:
           operation: PATCH_RUN
           status: "SUCCESS"
           runId: ${{ env.PORT_RUN_ID }}
-          logMessage: "EKS cluster destruction has been completed: ${{ env.CLUSTER_NAME }}."
+          logMessage: "EKS cluster destruction has been completed: ${{ env.CLUSTER_NAME }}"
