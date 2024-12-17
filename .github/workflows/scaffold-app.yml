@@ -28,7 +28,7 @@ jobs:
 
     env:
       PORT_RUN_ID: ${{ fromJson(github.event.inputs.context).runId }}
-      
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
     steps:
       - name: Create a log message (post-action)

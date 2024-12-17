@@ -1,0 +1,65 @@
+{
+    "identifier": "cluster_create-cluster",
+    "title": "Create Crossplane cluster",
+    "description": "Create a new cluster.",
+    "trigger": {
+      "type": "self-service",
+      "operation": "CREATE",
+      "userInputs": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "The name of the cluster"
+          },
+          "provider": {
+            "type": "string",
+            "title": "Provider",
+            "default": "aws",
+            "description": "The provider where the cluster is hosted",
+            "enum": [
+              "aws",
+              "azure"
+            ]
+          },
+          "node-size": {
+            "type": "string",
+            "title": "Node Size",
+            "default": "small",
+            "description": "The size of the nodes",
+            "enum": [
+              "small",
+              "medium",
+              "large"
+            ]
+          },
+          "min-node-count": {
+            "type": "string",
+            "title": "Minimum number of nodes",
+            "default": "1",
+            "description": "The minimun number of nodes (autoscaler might increase this number)"
+          }
+        },
+        "required": [
+          "name",
+          "provider",
+          "node-size",
+          "min-node-count"
+        ]
+      },
+      "blueprintIdentifier": "cluster"
+    },
+    "invocationMethod": {
+      "type": "GITHUB",
+      "org": "crypticseeds",
+      "repo": "port-idp-demo",
+      "workflow": "crossplane-create-cluster.yaml",
+      "workflowInputs": {
+        "name": "{{.inputs.\"name\"}}",
+        "provider": "{{.inputs.\"provider\"}}",
+        "node-size": "{{.inputs.\"node-size\"}}",
+        "min-node-count": "{{.inputs.\"min-node-count\"}}"
+      }
+    },
+    "publish": true
+  }

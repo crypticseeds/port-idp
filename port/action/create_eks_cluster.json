@@ -1,6 +1,6 @@
 {
   "identifier": "eks_create_eks_cluster",
-  "title": "Create an EKS cluster",
+  "title": "Create Terraform EKS cluster",
   "icon": "AmazonEKS",
   "description": "An action that creates an eks cluster",
   "trigger": {
@@ -11,7 +11,7 @@
         "cluster_name": {
           "title": "Cluster Name",
           "description": "The name of the EKS Cluster",
-          "icon": "AmazonEKS",
+          "icon": "Terraform",
           "type": "string"
         },
         "region": {
@@ -32,8 +32,8 @@
   },
   "invocationMethod": {
     "type": "GITHUB",
-    "org": "<GITHUB_ORG>",
-    "repo": "<GITHUB_REPO>",
+    "org": "crypticseeds",
+    "repo": "port-idp-demo",
     "workflow": "manage-eks-cluster.yml",
     "workflowInputs": {
       "cluster_name": "{{ .inputs.\"cluster_name\" }}",

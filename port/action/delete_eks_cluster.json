@@ -1,6 +1,6 @@
 {
   "identifier": "eks_delete_eks_cluster",
-  "title": "Delete an EKS cluster",
+  "title": "Delete Terraform EKS cluster",
   "icon": "AmazonEKS",
   "description": "An action that deletes an eks cluster",
   "trigger": {
@@ -23,8 +23,8 @@
   },
   "invocationMethod": {
     "type": "GITHUB",
-    "org": "your_org_name",
-    "repo": "your_repo_name",
+    "org": "crypticseeds",
+    "repo": "port-idp-demo",
     "workflow": "manage-eks-cluster.yml",
     "workflowInputs": {
       "cluster_name": "{{.entity.properties.name}}",

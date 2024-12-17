@@ -21,8 +21,8 @@
     },
     "invocationMethod": {
       "type": "GITHUB",
-      "org": "<GITHUB_ORG>",
-      "repo": "<GITHUB_REPO>",
+      "org": "crypticseeds",
+      "repo": "port-idp-demo",
       "workflow": "build-and-deploy.yml",
       "workflowInputs": {
         "cluster": "{{.inputs.\"cluster\"}}",

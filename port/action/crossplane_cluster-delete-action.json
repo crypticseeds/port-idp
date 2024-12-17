@@ -1,0 +1,32 @@
+{
+    "identifier": "crossplane-cluster-delete-cluster",
+    "title": "Delete Crossplane cluster",
+    "description": "Delete the cluster.",
+    "trigger": {
+      "type": "self-service",
+      "operation": "DELETE",
+      "userInputs": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "Confirm by typing the name of the cluster"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "blueprintIdentifier": "cluster"
+    },
+    "invocationMethod": {
+      "type": "GITHUB",
+      "org": "crypticseeds",
+      "repo": "port-idp-demo",
+      "workflow": "crossplane-delete-cluster.yaml",
+      "workflowInputs": {
+        "name": "{{.inputs.\"name\"}}"
+      }
+    },
+    "publish": true
+  }

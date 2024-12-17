@@ -18,7 +18,14 @@ jobs:
     env:
       REPO_URL: ${{ fromJson(inputs.context).entity.properties.url }}
       TRIGGERED_BY: ${{ fromJson(inputs.context).trigger.by.user.email || github.actor }}
-
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      PORT_CLIENT_ID: ${{ secrets.PORT_CLIENT_ID }}
+      PORT_CLIENT_SECRET: ${{ secrets.PORT_CLIENT_SECRET }}
+      PORT_RUN_ID: ${{ fromJson(inputs.context).runId }}
+      
     steps:
     - name: Extract repository owner and name
       run: |
@@ -33,7 +40,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ${{ env.REPO_OWNER }}/${{ env.REPO_NAME }}
-        token: ${{ secrets.CREATOR_TOKEN }}
+        token: ${{ secrets.GH_TOKEN }}
 
     - name: Get short commit ID
       id: get-commit-id
