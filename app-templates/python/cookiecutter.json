@@ -1,0 +1,9 @@
+{
+    "directory_name": "my-python-project",
+    "project_name": "My Python Project",
+    "description": "A short description of the project",
+    "author_name": "Femi Akinlotan",
+    "github_username": "crypticseeds",
+    "image_repository": "crypticseeds/port-idp-demo-app",
+    "python_version": "3.13"
+} 

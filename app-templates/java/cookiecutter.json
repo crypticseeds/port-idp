@@ -1,0 +1,9 @@
+{
+    "directory_name": "my-java-project",
+    "project_name": "My Java Project",
+    "description": "A short description of the project",
+    "author_name": "Femi Akinlotan",
+    "github_username": "crypticseeds",
+    "image_repository": "crypticseeds/port-idp-demo-app",
+    "package_name": "com.example.app"
+} 

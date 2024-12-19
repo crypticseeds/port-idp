@@ -1,0 +1,8 @@
+{
+    "directory_name": "my-go-project",
+    "project_name": "My Go Project",
+    "description": "A short description of the project",
+    "author_name": "Femi Akinlotan",
+    "github_username": "crypticseeds",
+    "image_repository": "crypticseeds/port-idp-demo-app"
+} 

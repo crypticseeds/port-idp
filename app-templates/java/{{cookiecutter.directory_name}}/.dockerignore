@@ -1,0 +1,22 @@
+# Java specific
+*.class
+*.jar
+*.war
+*.ear
+*.logs
+*.iml
+.gradle/
+build/
+target/
+
+# Environment
+.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store 
