@@ -1,4 +1,4 @@
-# Port-IDP-Demo
+# Port-IDP
 
 This repository demonstrates how to set up an Internal Developer Portal (IDP) using Port and infrastructure as code tools (Terraform/Crossplane). The IDP automates infrastructure provisioning, application scaffolding and deployment through GitHub Actions workflows.
 
